@@ -18,14 +18,6 @@ const receiveLaunches = (response) => ({
 
 export const fetchLaunches = async (dispatch) => {
   dispatch(requestLaunches());
-
   const response = await LaunchService.get();
-
   dispatch(receiveLaunches(response));
 };
-
-const shouldFetchLaunches = (launchCollection) =>
-  !launchCollection || !launchCollection.fetching;
-
-export const fetchLaunchesIfNeeded = ({ dispatch, launchCollection }) =>
-  shouldFetchLaunches(launchCollection) && fetchLaunches(dispatch);

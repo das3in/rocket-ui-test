@@ -1,38 +1,35 @@
-import React, { Component } from 'react';
-import { connect } from "react-redux";
+import React from "react";
 
-import Layout from './Layout';
-import Navigation from '../components/Navigation';
+import Layout from "./Layout";
+import Navigation from "../components/Navigation";
 
 const menu = Navigation();
 
-function MasterLayoutHOC(WrappedComponent, pageName) {
-  class MasterLayoutImpl extends Component {
-    render() {
+// function MasterLayoutHOC(WrappedComponent, pageName) {
+//   const MasterLayout = () => {
+//     const layoutProps = {
+//       menu,
+//       pageName,
+//     };
+//     return (
+//       <Layout {...layoutProps}>
+//         <WrappedComponent {...this.props} />
+//       </Layout>
+//     );
+//   };
+// }
 
-      const layoutProps = {
-        menu,
-        pageName
-      };
+const MasterLayoutHOC = (WrappedComponent, pageName) => {
+  const layoutProps = {
+    menu,
+    pageName,
+  };
 
-      return (
-        <Layout {...layoutProps}>
-          <WrappedComponent {...this.props} />
-        </Layout>
-      );
-    }
-  }
-
-  const mapStateToProps = state => state;
-
-  const mapDispatchToProps = dispatch => ({
-    dispatch
-  });
-
-  return connect(
-    mapStateToProps,
-    mapDispatchToProps
-  )(MasterLayoutImpl);
-}
+  return (
+    <Layout {...layoutProps}>
+      <WrappedComponent />
+    </Layout>
+  );
+};
 
 export default MasterLayoutHOC;
