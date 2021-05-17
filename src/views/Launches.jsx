@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchLaunches } from "../actions/Launches";
 import Layout from "./Layout";
@@ -7,12 +7,18 @@ import Navigation from "../components/Navigation";
 
 const menu = Navigation();
 
+const generateLaunchId = (flightNumber, missionName) =>
+  `${flightNumber}+${missionName}`;
+
 const Launches = () => {
+  const [selectedLaunch, setSelectedLaunch] = useState(null);
   const { launches, fetching } = useSelector((state) => state.launchCollection);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(fetchLaunches);
+    if (!launches.length) {
+      dispatch(fetchLaunches);
+    }
   }, []);
 
   return (
@@ -21,9 +27,21 @@ const Launches = () => {
         <div>LOADING</div>
       ) : (
         <div>
-          {launches.map((launch) => (
-            <Launch key={launch.launch_id} launch={launch} />
-          ))}
+          {launches.map((launch) => {
+            const launchId = generateLaunchId(
+              launch.flight_number,
+              launch.mission_name
+            );
+            return (
+              <Launch
+                key={launchId}
+                launchId={launchId}
+                launch={launch}
+                currentlySelected={launchId === selectedLaunch}
+                setSelectedLaunch={setSelectedLaunch}
+              />
+            );
+          })}
         </div>
       )}
     </Layout>
